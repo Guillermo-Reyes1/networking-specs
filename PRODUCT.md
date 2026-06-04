@@ -58,8 +58,8 @@ Students at networking events have no lightweight tool to capture and follow up 
 
 ## Open Questions
 - [ ] Soft-delete or hard-delete for contacts?
-- [ ] JWT access token expiry duration?
-- [ ] Refresh token expiry duration?
+- [X] JWT access token expiry duration? → 1 hour
+- [X] Refresh token expiry duration? → 30 days
 - [ ] Interaction log — append-only or editable/deletable?
 - [ ] Pagination strategy — cursor-based or offset?
 > Pagination and deletion strategy MUST be resolved during the contacts feature specify/clarify cycle — not deferred beyond it.
