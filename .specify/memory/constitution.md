@@ -1,29 +1,15 @@
 <!--
 Sync Impact Report
 ==================
-Version change: (unversioned template) → 1.0.0
-New constitution — initial adoption.
+Version change: 1.0.0 → 1.1.0
+Minor update — added SDD workflow constraints and clarified technical decisions.
 
-Principles defined:
-  I.   Speed of Capture First
-  II.  Offline-First on Mobile
-  III. Real-Time Cross-Device Sync
-  IV.  Simplicity Over Features
-  V.   API-Driven Data Model
-
-Sections added:
-  - Core Principles (5 principles)
-  - Technical Constraints
-  - Development Workflow
-  - Governance
-
-Templates status:
-  ✅ .specify/templates/plan-template.md  — Constitution Check section present; gates are principle-agnostic placeholders, no update required
-  ✅ .specify/templates/spec-template.md  — No constitution references; no update required
-  ✅ .specify/templates/tasks-template.md — No constitution references; no update required
+Sections modified:
+  - Technical Constraints: added retry policy, pagination/deletion resolution deadline
+  - Development Workflow: added platform-agnostic rule, backport rule, specify order rule
 
 Deferred items:
-  - None. All placeholders resolved.
+  - None.
 -->
 
 # Networking Contact Manager Constitution
@@ -107,21 +93,32 @@ backend independently testable.
 - **iOS sync**: Offline queue persisted on device; user-prompted conflict resolution on
   reconnect.
 - **API versioning**: `X-Sync-Version` header on all requests.
-- **Pagination**: Strategy is an open question (cursor vs. offset) — MUST be decided before
-  the first list endpoint is implemented and applied consistently thereafter.
-- **Deletion**: Soft-delete vs. hard-delete is an open question — MUST be decided before
-  any delete endpoint is implemented.
+- **Retry**: Exponential backoff for failed sync requests: 1s, 2s, 4s, 8s. No further
+  retries after four attempts — surface error to user.
+- **Pagination**: Strategy is an open question (cursor vs. offset) — MUST be decided during
+  the contacts feature specify/clarify cycle and applied consistently to all list endpoints
+  thereafter. MUST NOT be deferred beyond that cycle.
+- **Deletion**: Soft-delete vs. hard-delete is an open question — MUST be decided during
+  the contacts feature specify/clarify cycle before any delete endpoint is implemented.
+  MUST NOT be deferred beyond that cycle.
 
 ## Development Workflow
 
 - Each feature MUST have a spec before implementation begins.
 - The spec MUST define acceptance scenarios that are independently testable.
+- Features MUST be specified in dependency order: auth → contacts → interaction log → sync.
+  No feature MAY be specified before all features it depends on have completed the full
+  specify → clarify → plan → tasks → commit cycle.
 - Contact CRUD and interaction log MUST be developed and verified against the API contract
   before any client work begins.
 - All open questions listed in PRODUCT.md MUST be resolved before the affected endpoint is
   built (not deferred to code review).
 - Commits MUST be small and focused; one logical change per commit.
-- Shared specs in networking-specs MUST be platform-agnostic. No references to localStorage, SwiftUI, React, Core Data, URLSession, or any platform-specific term are permitted in shared spec files.
+- Shared specs in `networking-specs` MUST be platform-agnostic. No references to
+  `localStorage`, `SwiftUI`, `React`, `Core Data`, `URLSession`, or any other
+  platform-specific term are permitted in shared spec files.
+- Any decision made during platform clarification that is not platform-specific MUST be
+  backported to the shared spec before work on that platform begins.
 
 ## Governance
 
@@ -144,4 +141,4 @@ ratified.
 that verifies no principle is violated. Any violation MUST be justified in the Complexity
 Tracking table of the plan.
 
-**Version**: 1.0.0 | **Ratified**: 2026-06-03 | **Last Amended**: 2026-06-03
+**Version**: 1.1.0 | **Ratified**: 2026-06-03 | **Last Amended**: 2026-06-03
