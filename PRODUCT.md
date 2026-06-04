@@ -54,6 +54,7 @@ Students at networking events have no lightweight tool to capture and follow up 
 - WebSocket (Socket.io) for real-time push
 - JWT authentication with refresh tokens
 - API versioning via X-Sync-Version header
+- Retry: exponential backoff on failed sync requests — 1s, 2s, 4s, 8s; error surfaced to user after four attempts
 
 ## Open Questions
 - [ ] Soft-delete or hard-delete for contacts?
@@ -61,3 +62,4 @@ Students at networking events have no lightweight tool to capture and follow up 
 - [ ] Refresh token expiry duration?
 - [ ] Interaction log — append-only or editable/deletable?
 - [ ] Pagination strategy — cursor-based or offset?
+> Pagination and deletion strategy MUST be resolved during the contacts feature specify/clarify cycle — not deferred beyond it.
