@@ -22,11 +22,13 @@ All endpoints:
   "type": "coffee",
   "notes": "Discussed potential collaboration on open-source project.",
   "custom_type": null,
-  "created_at": "2026-06-07T14:22:00Z"
+  "created_at": "2026-06-07T14:22:00Z",
+  "updated_at": "2026-06-07T14:22:00Z"
 }
 ```
 
 `custom_type` appears in every response — as `null` when `type` is not `"other"`, never omitted.
+`updated_at` appears in every response and is never null. It equals `created_at` for interactions that have never been patched. Added by `004-cross-device-sync` for conflict detection during offline queue replay.
 
 ---
 
@@ -84,7 +86,8 @@ With `custom_type` (only when `type` is `"other"`):
   "type": "coffee",
   "notes": "Discussed potential collaboration on open-source project.",
   "custom_type": null,
-  "created_at": "2026-06-07T14:22:00Z"
+  "created_at": "2026-06-07T14:22:00Z",
+  "updated_at": "2026-06-07T14:22:00Z"
 }
 ```
 
@@ -166,7 +169,8 @@ No query parameters. All interactions are returned in a single response.
       "type": "email",
       "notes": "Sent intro email.",
       "custom_type": null,
-      "created_at": "2026-02-14T09:00:00Z"
+      "created_at": "2026-02-14T09:00:00Z",
+      "updated_at": "2026-02-14T09:00:00Z"
     },
     {
       "id": "8c4f0a23-2b3c-4d5e-9f5a-667788990011",
@@ -175,7 +179,8 @@ No query parameters. All interactions are returned in a single response.
       "type": "coffee",
       "notes": "Met at campus café.",
       "custom_type": null,
-      "created_at": "2026-06-07T14:22:00Z"
+      "created_at": "2026-06-07T14:22:00Z",
+      "updated_at": "2026-06-07T14:22:00Z"
     }
   ]
 }
@@ -245,7 +250,8 @@ Absent fields remain unchanged. An explicit `null` for `notes` or `custom_type` 
   "type": "coffee",
   "notes": null,
   "custom_type": null,
-  "created_at": "2026-06-07T14:22:00Z"
+  "created_at": "2026-06-07T14:22:00Z",
+  "updated_at": "2026-06-08T10:00:00Z"
 }
 ```
 
