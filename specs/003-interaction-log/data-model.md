@@ -18,6 +18,7 @@ exactly one contact (and transitively to one user).
 | `notes` | Text | NULLABLE | Free-text; no length limit enforced at DB level |
 | `custom_type` | String | NULLABLE, max 255 chars | Only populated when `type = "other"`; null for all other type values |
 | `created_at` | Timestamp (UTC) | NOT NULL, default now() | Immutable after creation; used as tie-breaker for sort |
+| `updated_at` | Timestamp (UTC) | NOT NULL, default now() | Updated on every PATCH; managed by ORM lifecycle hook or database trigger. Added by `004-cross-device-sync` for conflict detection. |
 
 **Validation rules**:
 - `date` must be a valid calendar date in `YYYY-MM-DD` format; required on create.
@@ -25,6 +26,7 @@ exactly one contact (and transitively to one user).
 - `custom_type` is only permitted when `type` is `"other"`. Providing `custom_type` alongside any other type value returns 400.
 - On PATCH: if `type` is set to a non-`"other"` value and `custom_type` is not explicitly provided, the server MUST clear `custom_type` to null.
 - All string fields are trimmed of leading/trailing whitespace before storage.
+- `updated_at` is managed automatically; it MUST NOT be accepted as a client-supplied field on create or update requests.
 
 **Deletion**: Hard-delete. The row is removed permanently with no recovery path.
 
